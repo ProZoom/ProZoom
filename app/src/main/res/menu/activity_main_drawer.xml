@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <item
+            android:id="@+id/github"
+            android:icon="@mipmap/ic_left_github"
+            android:title="Github开源"/>
+        <item
+            android:id="@+id/play"
+            android:icon="@mipmap/ic_left_play"
+            android:title="打赏"/>
+        <item
+            android:id="@+id/feedback"
+            android:icon="@mipmap/ic_left_feedback"
+            android:title="建议反馈"/>
+        <item
+            android:id="@+id/share"
+            android:icon="@mipmap/ic_left_share"
+            android:title="应用分享"/>
+</menu>
