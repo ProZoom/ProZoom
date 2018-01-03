@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -56,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static Tencent mTencent;
     private BaseUiListener mIUiListener;
-    final private String QQAPPID="1106290418";
+    final private String QQAPPID = "1106290418";
     private UserInfo mInfo;
 
 
@@ -67,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mTencent = Tencent.createInstance(QQAPPID,MainActivity.this);
+        mTencent = Tencent.createInstance(QQAPPID, MainActivity.this);
 
         initView();
         initData();
@@ -87,29 +88,29 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu,menu);
+        getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case updateWidgets:
         }
         return super.onOptionsItemSelected(item);
     }
 
     private void initView() {
-        mDrawerLayout=(DrawerLayout) findViewById(R.id.mDrawerLayout);
-        mToolBar=(Toolbar) findViewById(R.id.toolbar);
-        vp_main=(ViewPager) findViewById(R.id.vp_main);
-        bottomNavigationView=(BottomNavigationView) findViewById(R.id.main_navigation);
-        navigationView=(NavigationView) findViewById(R.id.navigation);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.mDrawerLayout);
+        mToolBar = (Toolbar) findViewById(R.id.toolbar);
+        vp_main = (ViewPager) findViewById(R.id.vp_main);
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.main_navigation);
+        navigationView = (NavigationView) findViewById(R.id.navigation);
         headerLayout = navigationView.inflateHeaderView(R.layout.nav_header);
         head = headerLayout.findViewById(R.id.nav_header_img);
         myName = headerLayout.findViewById(R.id.nav_header_name);
 
-        StatusBarUtils.setColorForDrawerLayout(this,mDrawerLayout,getResources().getColor(R.color.colorAccent),StatusBarUtils.DEFAULT_STATUS_BAR_ALPHA);
+        StatusBarUtils.setColorForDrawerLayout(this, mDrawerLayout, getResources().getColor(R.color.colorAccent), StatusBarUtils.DEFAULT_STATUS_BAR_ALPHA);
         mToolBar.setTitle("UI");
         setSupportActionBar(mToolBar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolBar, R.string.app_name, R.string.app_name);
@@ -141,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.ui:
                         vp_main.setCurrentItem(0);
                         mToolBar.setTitle("UI");
@@ -163,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                switch (position){
+                switch (position) {
                     case 0:
                         bottomNavigationView.setSelectedItemId(R.id.ui);
                         break;
@@ -179,15 +180,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-              navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.github:
                         //Toast.makeText(MainActivity.this, "Github", Toast.LENGTH_SHORT).show();
-                        Intent intent= new Intent();
+                        Intent intent = new Intent();
                         intent.setAction("android.intent.action.VIEW");
-                        Uri content_url = Uri.parse("https://github.com/ProZoom/Blog/blob/master/Blog/Other/Plugins.md");
+                        Uri content_url = Uri.parse("https://github.com/ProZoom/ProZoom");
                         intent.setData(content_url);
                         startActivity(intent);
                         break;
@@ -205,23 +206,26 @@ public class MainActivity extends AppCompatActivity {
                                 startActivity(intent2);
                             }
                         } else {
-                            Toast.makeText(MainActivity.this,"手机上未安装支付宝!",Toast.LENGTH_LONG).show();
+                            Toast.makeText(MainActivity.this, "手机上未安装支付宝!", Toast.LENGTH_LONG).show();
                         }
                         break;
 
                     case R.id.feedback:
-                        Toast.makeText(MainActivity.this,""+AppInfoUtils.getAppVersion(MainActivity.this), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "" + AppInfoUtils.getAppVersion(MainActivity.this), Toast.LENGTH_SHORT).show();
 
-                        Intent intent3=new Intent(MainActivity.this,FeedbackActivity.class);
+                        Intent intent3 = new Intent(MainActivity.this, FeedbackActivity.class);
                         startActivity(intent3);
                         break;
 
                     case R.id.share:
-                        Intent intent1=new Intent(Intent.ACTION_SEND);
-                        String ShareMessage="https://github.com/ProZoom/Blog";
-                        intent1.putExtra(Intent.EXTRA_TEXT,ShareMessage);
+                        Intent intent1 = new Intent(Intent.ACTION_SEND);
+                        String ShareMessage = "https://github.com/ProZoom/Blog";
+                        intent1.putExtra(Intent.EXTRA_TEXT, ShareMessage);
                         intent1.setType("text/plain");
-                        startActivity(Intent.createChooser(intent1,"share"));
+                        startActivity(Intent.createChooser(intent1, "share"));
+                        break;
+                    case R.id.exitapp:
+                        onBackPressed();
                         break;
                 }
                 return true;
@@ -238,9 +242,9 @@ public class MainActivity extends AppCompatActivity {
                 mIUiListener = new BaseUiListener();
 
                 if (!mTencent.isSessionValid()) {
-                    mTencent.login(MainActivity.this,"all", mIUiListener);
-                }else {
-                    Toast.makeText(MainActivity.this,"已经登陆",Toast.LENGTH_SHORT).show();
+                    mTencent.login(MainActivity.this, "all", mIUiListener);
+                } else {
+                    Toast.makeText(MainActivity.this, "已经登陆", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -248,19 +252,32 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /********** 双击退出程序 ************/
-    private long exitTime=0;
-    @Override
+       /* @Override
+private long exitTime = 0;
+
     public void onBackPressed() {
         // super.onBackPressed();
         //判断是否是在1秒内连续点击返回键，是则退出，不是不退出
-        if(System.currentTimeMillis()-exitTime>800){
-            Toast.makeText(this,"再按一次退出程序",Toast.LENGTH_LONG).show();
-            exitTime=System.currentTimeMillis();
-            if(mDrawerLayout.isDrawerOpen(Gravity.LEFT))
+        if (System.currentTimeMillis() - exitTime > 800) {
+            Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_LONG).show();
+            exitTime = System.currentTimeMillis();
+            if (mDrawerLayout.isDrawerOpen(Gravity.LEFT))
                 mDrawerLayout.closeDrawer(Gravity.LEFT);
-        }else {
+        } else {
             super.onBackPressed();
         }
+    }*/
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Intent home = new Intent(Intent.ACTION_MAIN);
+            home.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            home.addCategory(Intent.CATEGORY_HOME);
+            startActivity(home);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     private class BaseUiListener implements IUiListener {
@@ -307,7 +324,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onComplete(Object object) {
                 JSONObject jo = (JSONObject) object;
-                Log.i("Login","登录成功："+object.toString());
+                Log.i("Login", "登录成功：" + object.toString());
 
                 try {
                     String head_title = jo.getString("nickname");
@@ -317,13 +334,13 @@ public class MainActivity extends AppCompatActivity {
                     Picasso.with(getApplicationContext()).load(figureurl).into(head);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Log.i("Login","head_title");
+                    Log.i("Login", "head_title");
                 }
             }
 
             @Override
             public void onError(UiError uiError) {
-                Log.i("Login","获取信息失败"+uiError.errorDetail);
+                Log.i("Login", "获取信息失败" + uiError.errorDetail);
             }
 
             @Override

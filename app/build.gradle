@@ -18,10 +18,16 @@ android {
                 cppFlags ""
             }
         }
+
+        manifestPlaceholders = [
+                GETUI_APP_ID    : "UipySnyvpyANTUHiZdNk7A",
+                GETUI_APP_KEY   : "tWNDQCO7pA9HRQdYTMJ024",
+                GETUI_APP_SECRET: "Q07cBPE65i8VZS1nkixEDA"
+        ]
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -71,4 +77,5 @@ dependencies {
     //picasso图片加载框架
     compile 'com.squareup.picasso:picasso:2.5.2'
     implementation files('libs/mta-sdk-1.6.2.jar')
+    implementation files('libs/GetuiSDK2.11.1.0.jar')
 }
